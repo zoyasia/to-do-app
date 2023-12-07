@@ -41,7 +41,7 @@ services:
       - todonetwork
 
   php-fpm:
-    container_name: php
+    container_name: php-fpm
     build:
       context: ./docker/php-fpm
     volumes:
@@ -54,6 +54,8 @@ services:
       - todonetwork
     depends_on:
       - db
+    ports:
+      - "9000:9000"
 
 networks:
   todonetwork:
