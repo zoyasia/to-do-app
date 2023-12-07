@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+        - ./:/var/www
+        - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+        - ./var/log:/var/log/nginx
+    depends_on:
+        - php-fpm
+    ports:
+        - "8000:80"
+    networks:
+        - todonetwork
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: hello
+      MYSQL_DATABASE: toDoApp
+    networks:
+      - todonetwork
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8081:80
+    networks:
+      - todonetwork
+    environment:
+      PMA_HOST: db
+
+  node:
+    image: node:latest
+    ports:
+      - 5173:5173
+    command: bash -c "cd /app && npm install && npm run dev"
+    volumes:
+      - ./:/app
+    networks:
+      - todonetwork
+
+  php-fpm:
+    container_name: php
+    build:
+      context: ./docker/php-fpm
+    volumes:
+      - ./:/var/www
+      - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php-fpm/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - todonetwork
+    depends_on:
+      - db
+
+networks:
+  todonetwork:
+    driver: bridge
+
+volumes: 
+    db-data:
