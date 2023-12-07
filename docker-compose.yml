@@ -31,6 +31,7 @@ services:
       PMA_HOST: db
 
   node:
+    container_name: node
     image: node:latest
     ports:
       - 5173:5173
