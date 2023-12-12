@@ -19,7 +19,7 @@ class AppFixtures extends Fixture
         $task
         ->setTitle($faker->word)
         ->setDescription($faker->sentence)
-        ->setDeadline($faker->dateTimeBetween('now', '+3 months'))
+        ->setDeadline('23/11/2024')
         ->setIsCompleted($isCompleted)
         ->setStatus($isCompleted ? 'terminée' : 'à faire');
         

@@ -1,7 +1,12 @@
 <template>
   <div class="row g-2 align-items-center" id="searchBar">
     <div class="col-auto">
-      <input type="text" class="form-control" v-model="query" placeholder="upload fichiers, courses,... ">
+      <input
+        type="text"
+        class="form-control"
+        v-model="query"
+        placeholder="upload fichiers, courses,... "
+      />
     </div>
     <div class="col-auto">
       <button class="btn btn-light" @click="applyFilter">Rechercher</button>
@@ -10,13 +15,11 @@
 </template>
 
 <script lang="ts">
-
 export default {
-
   data() {
     return {
-      query: ''
-    }
+      query: "",
+    };
   },
 
   // intégrer un watcher qui lance le filtre dès que la query change
@@ -28,10 +31,8 @@ export default {
 
   methods: {
     applyFilter() {
-      this.$emit('apply-filter', this.query);
+      this.$emit("apply-filter", this.query);
     },
-    
   },
-
 };
 </script>

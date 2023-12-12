@@ -58,6 +58,14 @@ class TaskService
             $task->setDeadline($data['deadline']);
         }
 
+        if (!empty($data['status']) && $data['status'] !== $task->getStatus()) {
+            $task->setStatus($data['status']);
+        }
+
+        if ($data['status'] !== $task->isIsCompleted()) {
+            $task->setIsCompleted($data['isCompleted']);
+        }
+
         $this->entityManager->persist($task);
         $this->entityManager->flush();
     }
