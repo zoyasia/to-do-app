@@ -1,9 +1,9 @@
 <template id="table">
   <td>
     <input
-      v-model="task.isCompleted"
+      v-model="isChecked"
       type="checkbox"
-      @change="updateTaskStatus(task.id, task.isCompleted)"
+      @change="updateTaskStatus()"
     />
   </td>
   <th>{{ task.title }}</th>
@@ -42,8 +42,9 @@ import ConfirmDialogue from "../components/Modals/ConfirmDialogue.vue";
 import UpdateDialogue from "./Modals/UpdateDialogue.vue";
 
 export default {
-  setup() {
+  setup(props) {
     const taskStore = useTaskStore();
+   
     return { taskStore };
   },
 
@@ -53,7 +54,9 @@ export default {
       required: true,
     },
   },
-
+  mounted: function () {
+    this.isChecked = this.task.isCompleted
+  },
   data() {
     return {
       showConfirm: false,
@@ -61,20 +64,21 @@ export default {
       title: "",
       description: "",
       deadline: "",
+      isChecked: false
     };
   },
 
   components: { ConfirmDialogue, UpdateDialogue },
 
   methods: {
-    updateTaskStatus: function (taskId: number, isChecked: boolean) {
+    updateTaskStatus: function () {
       const newtask = {...this.task}
     
-      if (taskId) {
-        newtask.isCompleted = isChecked;
-        newtask.status = isChecked ? "terminée" : "à faire";
+      if (this.task.id) {
+        newtask.isCompleted = this.isChecked;
+        newtask.status = this.isChecked ? "terminée" : "à faire";
       }
-      this.taskStore.updateTask(taskId, newtask)
+      this.taskStore.updateTask(this.task.id, newtask)
     },
 
     updateTask(data: ITask) {
